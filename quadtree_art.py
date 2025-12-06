@@ -18,14 +18,12 @@ from tree import Point, Node     # <-- classes
 
 
 class QuadArt:
-    def __init__(self, img_array, capacity=4, num_points=500):
+    def __init__(self, img_array, capacity=4, num_points=35000):
         self.img = img_array
         self.H, self.W = img_array.shape[:2]
-        self.capacity = capacity
-        self.num_points = num_points
-
-        # Root of the spatial quadtree
         self.root = Node(0, 0, self.W, self.H, capacity)
+        self.num_points = num_points  # <-- store number of points to insert
+
 
     @staticmethod
     def load_image(path):
@@ -50,6 +48,12 @@ class QuadArt:
         for child in node.children:
             leaves.extend(self.collect_leaves(child))
         return leaves
+    
+    def average_color(self, x, y, w, h):
+        """Compute the average color of the image region defined by (x, y, w, h)."""
+        region = self.img[y:y+h, x:x+w]
+        avg_color = tuple(np.mean(region.reshape(-1, 3), axis=0).astype(int))
+        return avg_color
 
 
     def render(self):

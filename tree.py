@@ -4,13 +4,59 @@ from matplotlib.patches import Rectangle
 
 
 class Node:
-    def __init__(self, pos, data):
-        self.pos = pos # position as a Point object
-        self.data = data # associated data
-        self.topLeft = None
-        self.topRight = None
-        self.bottomLeft = None
-        self.bottomRight = None
+    def __init__(self, x, y, w, h, capacity):
+        self.x = x            # top-left corner x
+        self.y = y            # top-left corner y
+        self.w = w            # width
+        self.h = h            # height
+        self.capacity = capacity  # max points before subdividing
+        self.points = []      # points stored in this node
+        self.is_leaf = True   # starts as leaf
+        self.children = []    # list of 4 children after subdivision
+
+    def contains(self, point):
+        # check if a Point object is inside this node
+        return self.x <= point.x < self.x + self.w and self.y <= point.y < self.y + self.h
+
+    def subdivide(self):
+        # Split into 4 quadrants
+        half_w = self.w // 2
+        half_h = self.h // 2
+
+        self.children = [
+            Node(self.x, self.y, half_w, half_h, self.capacity),              # top-left
+            Node(self.x + half_w, self.y, half_w, half_h, self.capacity),    # top-right
+            Node(self.x, self.y + half_h, half_w, half_h, self.capacity),    # bottom-left
+            Node(self.x + half_w, self.y + half_h, half_w, half_h, self.capacity)  # bottom-right
+        ]
+        self.is_leaf = False
+
+    def insert(self, point):
+        if not self.contains(point):
+            return False
+
+        if self.is_leaf:
+            if len(self.points) < self.capacity:
+                self.points.append(point)
+                return True
+            else:
+                self.subdivide()
+                # Re-insert points into children
+                for p in self.points:
+                    for child in self.children:
+                        if child.insert(p):
+                            break
+                self.points = []  # clear points from parent
+                # Now insert the new point
+                for child in self.children:
+                    if child.insert(point):
+                        return True
+        else:
+            for child in self.children:
+                if child.insert(point):
+                    return True
+        return False
+
 
 class Point:
     def __init__(self, x, y):

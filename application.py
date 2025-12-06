@@ -32,8 +32,7 @@ def main():
 
     # Initialize art generator
     art = QuadArt(img_array,
-                  capacity=args.capacity,
-                  num_points=args.points)
+                  capacity=args.capacity)
 
     print(f"Inserting {args.points} points...")
     art.insert_random_points()
