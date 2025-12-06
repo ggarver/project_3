@@ -14,15 +14,15 @@ from PIL import Image, ImageDraw
 import cv2
 import argparse
 
-from tree import Point, Node     # <-- classes
+from quadtree import Node, Point  # <-- quadtree structure
 
 
 class QuadArt:
-    def __init__(self, img_array, capacity=4, num_points=35000):
+    def __init__(self, img_array, capacity, num_points):
         self.img = img_array
         self.H, self.W = img_array.shape[:2]
         self.root = Node(0, 0, self.W, self.H, capacity)
-        self.num_points = num_points  # <-- store number of points to insert
+        self.num_points = num_points
 
 
     @staticmethod

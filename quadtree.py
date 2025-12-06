@@ -1,7 +1,6 @@
 
 from typing import List, Tuple, Optional
 import numpy as np
-from tree import Quad, Point
 
 class Quadtree:
     def __init__(self, img: np.ndarray, x: int, y: int, w: int, h: int,
@@ -44,75 +43,62 @@ class Quadtree:
 
 
 class Point:
-    def __init__(self, x, y, name=None):
+    def __init__(self, x, y):
         self.x = x
-        self.y = y
-        self.name = name
-
-    def get_name(self):
-        return self.name
+        self.y = y 
     
 
 class Node:
-        # A node represents a rectangular region!
     def __init__(self, x, y, w, h, capacity):
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
-        self.capacity = capacity
-        # Nodes know their points - points dont know their nodes
-        self.points = []
-        self.is_leaf = True # Start with no children
-        self.children = []
-        self.capacity = capacity
+        self.x = x            # top-left corner x
+        self.y = y            # top-left corner y
+        self.w = w            # width
+        self.h = h            # height
+        self.capacity = capacity  # max points before subdividing
+        self.points = []      # points stored in this node
+        self.is_leaf = True   # starts as leaf
+        self.children = []    # list of 4 children after subdivision
 
-    def contains(self, point: Point) -> bool:
-        # check if point is in node region
-        return (self.x <= point.x < self.x + self.w) and (self.y <= point.y < self.y + self.h)
-    
+    def contains(self, point):
+        # check if a Point object is inside this node
+        return self.x <= point.x < self.x + self.w and self.y <= point.y < self.y + self.h
+
     def subdivide(self):
-        # calculate dimensions
+        # Split into 4 quadrants
         half_w = self.w // 2
         half_h = self.h // 2
 
-        self.children = [Node(self.x, self.y, half_w, half_h),
-                         Node(self.x + half_h, self.y, half_w, half_h),
-                         Node(self.x, self.y + half_h, half_w, half_h),
-                         Node(self.x + half_h, self.y + half_h, half_w, half_h)]
-        
+        self.children = [
+            Node(self.x, self.y, half_w, half_h, self.capacity),              # top-left
+            Node(self.x + half_w, self.y, half_w, half_h, self.capacity),    # top-right
+            Node(self.x, self.y + half_h, half_w, half_h, self.capacity),    # bottom-left
+            Node(self.x + half_w, self.y + half_h, half_w, half_h, self.capacity)  # bottom-right
+        ]
         self.is_leaf = False
 
     def insert(self, point):
-        # first check if point is in node region
         if not self.contains(point):
             return False
-        
-        if self.is_leaf: 
+
+        if self.is_leaf:
             if len(self.points) < self.capacity:
                 self.points.append(point)
-            else:
-                self.subdivide()
-                for child in self.children:
-                    # recursively put point in
-                    if child.insert(point):
-                        return True
-                return False
-            
-    def delete(self, point):
-        # check if point is in node
-        if not self.contains(point):
-            return False
-        
-        elif self.is_leaf:
-            if point in self.points:
-                self.points.remove(point)
                 return True
             else:
-                return False
+                self.subdivide()
+                # Re-insert points into children
+                for p in self.points:
+                    for child in self.children:
+                        if child.insert(p):
+                            break
+                self.points = []  # clear points from parent
+                # Now insert the new point
+                for child in self.children:
+                    if child.insert(point):
+                        return True
         else:
-            # self is not a leaf = has children
             for child in self.children:
-                if child.delete(point):
+                if child.insert(point):
                     return True
-            return False
+        return False
+
