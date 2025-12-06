@@ -55,7 +55,8 @@ quad_art.png
 <img width="539" height="535" alt="Screenshot 2025-12-05 234259" src="https://github.com/user-attachments/assets/0236eef8-6bfc-4835-9dd0-d69c298515c2" />
 
 # 50000 random points
-<img width="533" height="534" alt="Screenshot 2025-12-05 234319" src="https://github.com/user-attachments/assets/31d40af0-cb58-4006-a5a9-bde7a7948326" />
+<img width="531" height="537" alt="image" src="https://github.com/user-attachments/assets/d5859fe5-c09a-403d-bd7d-213fcf73de41" />
+
 
 
 # How the Quadtree Works
@@ -79,3 +80,4 @@ A major challenge was getting the output image to actually change with the numbe
 - Adaptive subdivision based on image variance
 - Interactive visualization tools
 - Performance optimizations
+
