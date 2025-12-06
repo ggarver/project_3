@@ -1,25 +1,30 @@
-Random Image Segmentation (Quadtree Art)
-Overview
+Here you go — the whole thing cleanly formatted in Markdown:
 
-This project implements a quadtree to segment an image based on randomly sampled points. The program inserts a user-chosen number of random points into the image, divides the space into quadtree nodes, and colors each node using the average color of the pixels it contains.
+# Random Image Segmentation (Quadtree Art)
 
-This can be used as a visual demonstration of:
+## Overview
+This project implements a **quadtree** to segment an image based on randomly sampled points.  
+The program inserts a user-chosen number of random points into the image, divides the space into quadtree nodes, and colors each node using the **average color of the pixels** it contains.
 
-How quadtrees partition 2D space
+This project visually demonstrates:
 
-How randomized subdivisions affect image structure
+- How quadtrees partition 2D space  
+- How randomized subdivisions affect image structure  
+- Differences between quadtrees and traditional binary trees  
 
-Differences between quadtrees and traditional binary trees
+---
 
-Team Members
+## Team Members
+**Just me — Grace Garver**
 
-Just me — Grace Garver
+---
 
-Installation & Setup
-Dependencies
+## Installation & Setup
 
+### Dependencies
 Install prerequisites (virtual environment recommended):
 
+```bash
 pip install numpy opencv-python pillow
 
 How to Run
@@ -31,8 +36,7 @@ python application.py --input apple.jpg --output quad_art.png --capacity 4
 
 When prompted:
 
-How many randomized points would you like to insert?:
-
+"How many randomized points would you like to insert?"
 
 Enter a number up to 60,000.
 More points → more subdivisions → more detail (but slower).
@@ -40,53 +44,38 @@ More points → more subdivisions → more detail (but slower).
 The generated image will be saved as:
 
 quad_art.png
+```
 
-Screenshots / Demos
+# Screenshots / Demos
 
-(Add screenshots here)
+## 60 random points
+<img width="537" height="539" alt="Screenshot 2025-12-05 234230" src="https://github.com/user-attachments/assets/ead6bd3c-3a73-422c-97f7-537b0c09d260" />
 
-How the Quadtree Works
+# 1000 random points
+<img width="539" height="535" alt="Screenshot 2025-12-05 234259" src="https://github.com/user-attachments/assets/0236eef8-6bfc-4835-9dd0-d69c298515c2" />
 
-The image is treated as a 2D array of pixels.
+# 50000 random points
+<img width="533" height="534" alt="Screenshot 2025-12-05 234319" src="https://github.com/user-attachments/assets/31d40af0-cb58-4006-a5a9-bde7a7948326" />
 
-The user chooses how many random points to insert.
 
-Each quadtree node can hold up to capacity points.
+# How the Quadtree Works
 
-When a node exceeds capacity, it subdivides into four children.
+- The image is treated as a 2D array of pixels.
+- The user chooses how many random points to insert.
+- Each quadtree node can hold up to capacity points.
+- When a node exceeds capacity, it subdivides into four children.
+- Each final leaf node is rendered using the average color of its region.
 
-Each final leaf node is rendered using the average color of its region.
+# Evolution of the Interface
 
-Complexity
+Originally, I planned to use Harris Corners to guide subdivision. Due to scope and time constraints, I scaled back to a randomized approach so I could deeply understand quadtree behavior and ensure a working implementation. I learned that sometimes it is helpful to simplify my grander ideas to more manageable ones when on a time crunch.
 
-Insertion:
+# Challenges & Solutions
+Integrating VS Code with my terminal took time — once configured, it sped up development.
+A major challenge was getting the output image to actually change with the number of points; early versions produced a static result. Careful debugging and stepping through the subdivision logic fixed this.
 
-Best/average: O(log n)
-
-Worst (highly unbalanced): O(n)
-
-Space:
-
-Up to O(n) nodes in the worst case
-
-Typically closer to O(n log n) with random distribution
-
-Evolution of the Interface
-
-Originally, I planned to use Harris Corners to guide subdivision.
-Due to scope and time constraints, I scaled back to a randomized approach so I could deeply understand quadtree behavior and ensure a working implementation. This taught me the value of simplifying ambitious ideas into something achievable and educational.
-
-Challenges & Solutions
-
-Integrating VS Code with my terminal took time, but once configured, it sped up development.
-A major challenge was getting the output image to change with the number of points — it initially produced a static result. Careful debugging and tracing through the subdivision logic eventually resolved this issue.
-
-Future Enhancements
-
-Integrating Harris Corners or other feature detectors
-
-Adaptive subdivision based on image variance
-
-Interactive visualization tools
-
-Performance optimizations
+# Future Enhancements
+- Integrating Harris Corners or other feature detectors
+- Adaptive subdivision based on image variance
+- Interactive visualization tools
+- Performance optimizations
