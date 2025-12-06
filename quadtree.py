@@ -1,6 +1,7 @@
 
 from typing import List, Tuple, Optional
 import numpy as np
+from tree import Quad, Point
 
 class Quadtree:
     def __init__(self, img: np.ndarray, x: int, y: int, w: int, h: int,
@@ -27,6 +28,20 @@ class Quadtree:
                     return print(f"Point found {point} in {child}")
             return False
         
+    def get_leaves(self):
+        # traverse to collect all leaf nodes
+        if self.is_leaf:
+            return [(self.x, self.y, self.w, self.h, self.get_average_color())]
+        else:
+            leaves = []
+            for child in self.children:
+                leaves.extend(child.get_leaves())
+            return leaves
+
+    def contains(self, point: Tuple[int, int]) -> bool:
+        px, py = point
+        return (self.x <= px < self.x + self.w) and (self.y <= py < self.y + self.h)
+
 
 class Point:
     def __init__(self, x, y, name=None):
