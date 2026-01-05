@@ -1,5 +1,3 @@
-Here you go — the whole thing cleanly formatted in Markdown:
-
 # Random Image Segmentation (Quadtree Art)
 
 ## Overview
@@ -80,4 +78,5 @@ A major challenge was getting the output image to actually change with the numbe
 - Adaptive subdivision based on image variance
 - Interactive visualization tools
 - Performance optimizations
+
 
